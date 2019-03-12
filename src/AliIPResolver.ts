@@ -1,7 +1,4 @@
 
-import { configureRequestUrl } from "builder-util-runtime"
-import { ElectronHttpExecutor } from 'electron-updater/out/ElectronHttpExecutor'
-import { URL } from 'url'
 import md5 from 'md5'
 
 import BasicIPResolver, { IPArray, HttpDnsConfig } from './BasicIPResolver'
@@ -23,7 +20,8 @@ export const aliServers = [
 export interface AliDnsConfig extends HttpDnsConfig {
     secret: string,
     accountId: string,
-    servers?: Array<string> | string
+    servers?: Array<string> | string,
+    httpExecutor: any
 }
 
 export default class AliIPResolver extends BasicIPResolver {
@@ -31,16 +29,13 @@ export default class AliIPResolver extends BasicIPResolver {
         super(config.servers || aliServers)
         this.secret = config.secret
         this.accountId = config.accountId
+        this.httpExecutor = config.httpExecutor
     }
+    protected httpExecutor: any
     protected secret:string
     protected accountId: string
     public async request(url: string): Promise<IPArray | null | undefined> {
-        const httpExecutor = new ElectronHttpExecutor((authInfo: any, callback: Function) => callback)
-        const opts = {}
-        configureRequestUrl(new URL(url), opts);
-        let resultStr;
-        resultStr = await httpExecutor.request(opts)
-        const result: AliHttpDNSResult = resultStr ? JSON.parse(resultStr) : {}
+        const result: AliHttpDNSResult  = await this.httpExecutor(url)
         return result.ips;
     }
     public async createRequestUrl(dnsServer: string | undefined, host: string): Promise<string> {

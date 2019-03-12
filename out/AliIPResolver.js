@@ -5,36 +5,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = exports.aliServers = void 0;
 
-function _builderUtilRuntime() {
-  const data = require("builder-util-runtime");
-
-  _builderUtilRuntime = function () {
-    return data;
-  };
-
-  return data;
-}
-
-function _ElectronHttpExecutor() {
-  const data = require("electron-updater/out/ElectronHttpExecutor");
-
-  _ElectronHttpExecutor = function () {
-    return data;
-  };
-
-  return data;
-}
-
-function _url() {
-  const data = require("url");
-
-  _url = function () {
-    return data;
-  };
-
-  return data;
-}
-
 function _md() {
   const data = _interopRequireDefault(require("md5"));
 
@@ -65,15 +35,11 @@ class AliIPResolver extends _BasicIPResolver().default {
     super(config.servers || aliServers);
     this.secret = config.secret;
     this.accountId = config.accountId;
+    this.httpExecutor = config.httpExecutor;
   }
 
   async request(url) {
-    const httpExecutor = new (_ElectronHttpExecutor().ElectronHttpExecutor)((authInfo, callback) => callback);
-    const opts = {};
-    (0, _builderUtilRuntime().configureRequestUrl)(new (_url().URL)(url), opts);
-    let resultStr;
-    resultStr = await httpExecutor.request(opts);
-    const result = resultStr ? JSON.parse(resultStr) : {};
+    const result = await this.httpExecutor(url);
     return result.ips;
   }
 
