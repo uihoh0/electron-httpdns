@@ -1,2 +1,2 @@
 import BasicIPResolver from './BasicIPResolver';
-export default function dnsResolverManager(httpdns?: any): Promise<BasicIPResolver | false>;
+export default function dnsResolverManager(httpdns?: any): BasicIPResolver | false;

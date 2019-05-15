@@ -15,6 +15,16 @@ function _md() {
   return data;
 }
 
+function _axios() {
+  const data = _interopRequireDefault(require("axios"));
+
+  _axios = function () {
+    return data;
+  };
+
+  return data;
+}
+
 function _BasicIPResolver() {
   const data = _interopRequireDefault(require("./BasicIPResolver"));
 
@@ -35,7 +45,16 @@ class AliIPResolver extends _BasicIPResolver().default {
     super(config.servers || aliServers);
     this.secret = config.secret;
     this.accountId = config.accountId;
-    this.httpExecutor = config.httpExecutor;
+
+    if (config.httpExecutor) {
+      this.httpExecutor = config.httpExecutor;
+    }
+  }
+
+  async httpExecutor(url) {
+    return await _axios().default.get(url).then(r => {
+      return r.data;
+    });
   }
 
   async request(url) {

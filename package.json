@@ -1,6 +1,6 @@
 {
-  "name": "electron-httpdns-tmp",
-  "version": "1.0.4",
+  "name": "electron-httpdns",
+  "version": "1.0.3",
   "description": "electron-httpdns",
   "main": "out/index.js",
   "scripts": {
@@ -11,6 +11,7 @@
   "author": "uihoh0 <uihoh0@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.18.0",
     "md5": "^2.2.1"
   },
   "files": [

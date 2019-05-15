@@ -1,6 +1,6 @@
 
 import md5 from 'md5'
-
+import axios from 'axios'
 import BasicIPResolver, { IPArray, HttpDnsConfig } from './BasicIPResolver'
 
 export interface AliHttpDNSResult {
@@ -21,7 +21,7 @@ export interface AliDnsConfig extends HttpDnsConfig {
     secret: string,
     accountId: string,
     servers?: Array<string> | string,
-    httpExecutor: any
+    httpExecutor(url: string): Promise<AliHttpDNSResult>
 }
 
 export default class AliIPResolver extends BasicIPResolver {
@@ -29,13 +29,19 @@ export default class AliIPResolver extends BasicIPResolver {
         super(config.servers || aliServers)
         this.secret = config.secret
         this.accountId = config.accountId
-        this.httpExecutor = config.httpExecutor
+        if (config.httpExecutor) {
+            this.httpExecutor = config.httpExecutor
+        }
     }
-    protected httpExecutor: any
-    protected secret:string
+    protected async httpExecutor(url: string): Promise<AliHttpDNSResult> {
+        return await axios.get(url).then(r => {
+            return r.data
+        })
+    }
+    protected secret: string
     protected accountId: string
     public async request(url: string): Promise<IPArray | null | undefined> {
-        const result: AliHttpDNSResult  = await this.httpExecutor(url)
+        const result: AliHttpDNSResult = await this.httpExecutor(url)
         return result.ips;
     }
     public async createRequestUrl(dnsServer: string | undefined, host: string): Promise<string> {

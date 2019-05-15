@@ -19,7 +19,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 let resolver = false;
 
-async function dnsResolverManager(httpdns) {
+function dnsResolverManager(httpdns) {
   if (resolver) {
     return resolver;
   }

@@ -1,16 +1,17 @@
 
 export interface IPArray extends Array<string> { }
 
+
 export interface HttpDnsConfig {
     type: string
 }
 export default abstract class BasicIPResolver {
     constructor(servers?: Array<string> | string) {
         this.ipsCache = {}
-        if(!servers){
+        if (!servers) {
             return
         }
-        if(Array.isArray(servers)){
+        if (Array.isArray(servers)) {
             this.servers = this.servers.concat(servers)
             return
         }
@@ -34,7 +35,7 @@ export default abstract class BasicIPResolver {
     public async createRequestUrl(dnsServer: string | undefined, host: string): Promise<string> {
         return `http://${dnsServer}/?${host}`
     }
-    protected async loopResolve(host: string, servers?: IPArray):Promise<IPArray | null | undefined> {
+    protected async loopResolve(host: string, servers?: IPArray): Promise<IPArray | null | undefined> {
         const _servers: Array<string> = (servers || []).slice(0);
         if (_servers.length < 1) {
             return null

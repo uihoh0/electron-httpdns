@@ -28,8 +28,6 @@ Object.defineProperty(exports, "HttpDnsURL", {
   }
 });
 
-require("electron");
-
 function _AliIPResolver() {
   const data = _interopRequireDefault(require("./AliIPResolver"));
 

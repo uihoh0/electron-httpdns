@@ -10,11 +10,11 @@ export interface AliDnsConfig extends HttpDnsConfig {
     secret: string;
     accountId: string;
     servers?: Array<string> | string;
-    httpExecutor: any;
+    httpExecutor(url: string): Promise<AliHttpDNSResult>;
 }
 export default class AliIPResolver extends BasicIPResolver {
     constructor(config: AliDnsConfig);
-    protected httpExecutor: any;
+    protected httpExecutor(url: string): Promise<AliHttpDNSResult>;
     protected secret: string;
     protected accountId: string;
     request(url: string): Promise<IPArray | null | undefined>;
